@@ -7,18 +7,18 @@ on:
 
 jobs:
   update_pr_label:
-    if: startsWith(github.event.head_commit.message, 'Merge pull request') && contains(github.event.head_commit.message, 'from formigas/codemagic-ci-changes-')
+    if: startsWith(github.event.head_commit.message, 'Merge pull request') && contains(github.event.head_commit.message, 'from codemagic-ci-changes-')
     runs-on: ubuntu-latest
     steps:
       - name: Extract PR number
         id: extract_pr
         run: |
-          PR_NUMBER=$(echo "${{ github.event.head_commit.message }}" | grep -oP 'from formigas/codemagic-ci-changes-\K\d+')
+          PR_NUMBER=$(echo "${{ github.event.head_commit.message }}" | grep -oP 'from codemagic-ci-changes-\K\d+')
           echo "pr_number=$PR_NUMBER" >> $GITHUB_OUTPUT
       - uses: actions/create-github-app-token@v1
         id: app-token
         with:
-          app-id: ${{ secrets.FORMIGAS_APP_ID }}
+          app-id: ${{ vars.FORMIGAS_FLIK_APP_ID }}
           private-key: ${{ secrets.FORMIGAS_APP_PRIVATE_KEY }}
 
       - name: Add label to PR
